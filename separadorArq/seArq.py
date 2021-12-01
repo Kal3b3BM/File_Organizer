@@ -7,22 +7,25 @@ root.withdraw()
 def selPastas():
     global pastaFonte, pastaImagem, pastaVideo
     if "y" == input("Selecionar pastas? [y/n] ").lower():
-        file = open('C:\Windows\System32\config.json', 'w')
+        file = open('C:\Windows\config.json', 'w')
         pastaFonte = filedialog.askdirectory(title="Selecionar pasta Fonte")
         pastaImagem = filedialog.askdirectory(title="Selecionar pasta de Imagem")
         pastaVideo = filedialog.askdirectory(title="Selecionar pasta de Video")
         file.write(pastaFonte + '\n' + pastaImagem  + '\n' + pastaVideo)
         file.close()
 
-def loop(inp = "d"):
-    global pastaFonte, pastaImagem
-    file = open('C:\Windows\System32\config.json', 'r')
+def lerJason():
+    global pastaFonte, pastaImagem, pastaVideo
+    file = open('C:\Windows\config.json', 'r')
     pastaFonte = str(file.readlines()[0][:-1])
-    file = open('C:\Windows\System32\config.json', 'r')
+    file = open('C:\Windows\config.json', 'r')
     pastaImagem = str(file.readlines()[1][:-1])
-    file = open('C:\Windows\System32\config.json', 'r')
+    file = open('C:\Windows\config.json', 'r')
     pastaVideo = str(file.readlines()[2])
     file.close()
+
+def loop(inp = "d"):
+    lerJason()
     if "a" == inp:
         while True:
             arquivo = os.listdir(pastaFonte)
