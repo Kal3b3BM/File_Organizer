@@ -8,9 +8,9 @@ def selPastas():
     global pastaFonte, pastaImagem, pastaVideo
     if "y" == input("Selecionar pastas? [y/n] ").lower():
         file = open('C:\Windows\config.json', 'w')
-        pastaFonte = filedialog.askdirectory(title="Selecionar pasta Fonte")
-        pastaImagem = filedialog.askdirectory(title="Selecionar pasta de Imagem")
-        pastaVideo = filedialog.askdirectory(title="Selecionar pasta de Video")
+        pastaFonte = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta Fonte")
+        pastaImagem = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de Imagem")
+        pastaVideo = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de Video")
         file.write(pastaFonte + '\n' + pastaImagem  + '\n' + pastaVideo)
         file.close()
 
