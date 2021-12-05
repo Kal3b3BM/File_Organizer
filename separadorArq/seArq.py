@@ -27,44 +27,47 @@ def lerJason():
 def loop(inp = "d"):
     lerJason()
     if "a" == inp:
-        while True:
-            arquivo = os.listdir(pastaFonte)
-            dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-            for arq in arquivo:
-                arqi = os.listdir(pastaImagem)
-                arqv = os.listdir(pastaVideo)
-                if arq not in arqi and arq not in arqv:
-                    arq = pastaFonte + f"/{arq}"
-                    dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                    if dCria >= dPass and (arq[-3:].lower() == "jpg" or arq[-3:].lower() == "png" or arq[-4:].lower() == "jpeg"):
-                        try:
-                            shutil.copy(arq, pastaImagem)
-                        except:
-                            continue
-                    if dCria >= dPass and (arq[-3:].lower() == "mp4" or arq[-3:].lower() == "wmv" or arq[-4:].lower() == "mpeg"):
-                        try:
-                            shutil.copy(arq, pastaVideo)
-                        except:
-                            continue
-            arquivo = os.listdir(pastaImagem)
-            for arq in arquivo:
-                arq = pastaImagem + f"/{arq}"
-                dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                if dCria < dPass:
-                    try:
-                        os.remove(arq)
-                    except:
-                        continue
-            arquivo = os.listdir(pastaVideo)
-            for arq in arquivo:
-                arq = pastaVideo + f"/{arq}"
-                dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                if dCria < dPass:
-                    try:
-                        os.remove(arq)
-                    except:
-                        continue
-            time.sleep(5)
+            while True:
+                try:
+                    arquivo = os.listdir(pastaFonte)
+                    dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+                    for arq in arquivo:
+                        arqi = os.listdir(pastaImagem)
+                        arqv = os.listdir(pastaVideo)
+                        if arq not in arqi and arq not in arqv:
+                            arq = pastaFonte + f"/{arq}"
+                            dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
+                            if dCria >= dPass and (arq[-3:].lower() == "jpg" or arq[-3:].lower() == "png" or arq[-4:].lower() == "jpeg"):
+                                try:
+                                    shutil.copy(arq, pastaImagem)
+                                except:
+                                    continue
+                            if dCria >= dPass and (arq[-3:].lower() == "mp4" or arq[-3:].lower() == "wmv" or arq[-4:].lower() == "mpeg"):
+                                try:
+                                    shutil.copy(arq, pastaVideo)
+                                except:
+                                    continue
+                    arquivo = os.listdir(pastaImagem)
+                    for arq in arquivo:
+                        arq = pastaImagem + f"/{arq}"
+                        dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
+                        if dCria < dPass:
+                            try:
+                                os.remove(arq)
+                            except:
+                                continue
+                    arquivo = os.listdir(pastaVideo)
+                    for arq in arquivo:
+                        arq = pastaVideo + f"/{arq}"
+                        dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
+                        if dCria < dPass:
+                            try:
+                                os.remove(arq)
+                            except:
+                                continue
+                    time.sleep(5)
+                except:
+                    continue
 
 if __name__ == "__main__":
     selPastas()
