@@ -4,71 +4,75 @@ from tkinter import filedialog
 root = tkinter.Tk()
 root.withdraw()
 
-def selPastas():
-    global pastaFonte, pastaImagem, pastaVideo
+def sel_pastas():
     if "y" == input("Selecionar pastas? [y/n] ").lower():
         file = open('C:\Windows\config.json', 'w')
         pastaFonte = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta Fonte")
-        pastaImagem = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de Imagem")
-        pastaVideo = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de Video")
-        file.write(pastaFonte + '\n' + pastaImagem  + '\n' + pastaVideo)
+        pastaImagemDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO DIA")
+        pastaVideoDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO DIA")
+        pastaImagemMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO MÊS")
+        pastaVideoMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO MÊS")
+        file.write(pastaFonte + '\n' + pastaImagemDia  + '\n' + pastaVideoDia + '\n' + pastaImagemMes  + '\n' + pastaVideoMes)
         file.close()
+        return pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes
 
-def lerJason():
-    global pastaFonte, pastaImagem, pastaVideo
+def ler_jason():
     file = open('C:\Windows\config.json', 'r')
-    pastaFonte = str(file.readlines()[0][:-1])
+    pastaFonte = str(file.readline()[0])
     file = open('C:\Windows\config.json', 'r')
-    pastaImagem = str(file.readlines()[1][:-1])
+    pastaImagemDia = str(file.readline()[1])
     file = open('C:\Windows\config.json', 'r')
-    pastaVideo = str(file.readlines()[2])
+    pastaVideoDia = str(file.readline()[2])
+    file = open('C:\Windows\config.json', 'r')
+    pastaImagemMes = str(file.readline()[3])
+    file = open('C:\Windows\config.json', 'r')
+    pastaVideoMes = str(file.readline()[4])
     file.close()
+    return pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes
 
-def loop(inp = "d"):
-    lerJason()
-    if "a" == inp:
-            while True:
-                try:
-                    arquivo = os.listdir(pastaFonte)
-                    dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-                    for arq in arquivo:
-                        arqi = os.listdir(pastaImagem)
-                        arqv = os.listdir(pastaVideo)
-                        if arq not in arqi and arq not in arqv:
-                            arq = pastaFonte + f"/{arq}"
-                            dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                            if dCria >= dPass and (arq[-3:].lower() == "jpg" or arq[-3:].lower() == "png" or arq[-4:].lower() == "jpeg"):
-                                try:
-                                    shutil.copy(arq, pastaImagem)
-                                except:
-                                    continue
-                            if dCria >= dPass and (arq[-3:].lower() == "mp4" or arq[-3:].lower() == "wmv" or arq[-4:].lower() == "mpeg"):
-                                try:
-                                    shutil.copy(arq, pastaVideo)
-                                except:
-                                    continue
-                    arquivo = os.listdir(pastaImagem)
-                    for arq in arquivo:
-                        arq = pastaImagem + f"/{arq}"
+def deleta_arquivos(pasta, dias):
+    arquivo = os.listdir(pasta)
+    for arq in arquivo:
+        arq = pasta + f"/{arq}"
+        dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
+        dPass = (datetime.date.today() - datetime.timedelta(days=dias)).strftime('%Y-%m-%d')
+        if dCria < dPass:
+            try:
+                os.remove(arq)
+            except:
+                continue
+
+def loop(m = False):
+    pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
+    if m:
+        while True:
+            try:
+                arquivo = os.listdir(pastaFonte)
+                dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+                for arq in arquivo:
+                    arquivosImagemDia = os.listdir(pastaImagemDia)
+                    arquivosVideoDia = os.listdir(pastaVideoDia)
+                    if arq not in (arquivosImagemDia, arquivosVideoDia):
+                        arq = pastaFonte + f"/{arq}"
                         dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                        if dCria < dPass:
+                        if dCria >= dPass and (arq[-3:].lower() == "jpg" or arq[-3:].lower() == "png" or arq[-4:].lower() == "jpeg"):
                             try:
-                                os.remove(arq)
+                                shutil.copy(arq, pastaImagemDia)
+                                shutil.copy(arq, pastaImagemMes)
                             except:
                                 continue
-                    arquivo = os.listdir(pastaVideo)
-                    for arq in arquivo:
-                        arq = pastaVideo + f"/{arq}"
-                        dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                        if dCria < dPass:
+                        if dCria >= dPass and (arq[-3:].lower() == "mp4" or arq[-3:].lower() == "wmv" or arq[-4:].lower() == "mpeg"):
                             try:
-                                os.remove(arq)
+                                shutil.copy(arq, pastaVideoDia)
+                                shutil.copy(arq, pastaVideoMes)
                             except:
                                 continue
-                    time.sleep(5)
-                except:
-                    continue
+                deleta_arquivos(pastaImagemDia, 1)
+                deleta_arquivos(pastaVideoDia, 1)
+                time.sleep(5)
+            except:
+                continue
 
 if __name__ == "__main__":
-    selPastas()
-    loop(input("Ativar/Desativar programa? [a/d] ").lower())
+    sel_pastas()
+    loop(int(input("Ativar/Desativar programa? [1/0] ")))

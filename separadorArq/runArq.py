@@ -1,3 +1,3 @@
 from seArq import loop
 
-loop("a")
+loop(True)
