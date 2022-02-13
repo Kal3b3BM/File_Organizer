@@ -1,3 +1,3 @@
-from seArq import loop
+from MenuFileOrganizer import loop
 
 loop(True)
