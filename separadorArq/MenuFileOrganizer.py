@@ -43,10 +43,7 @@ def loop(m = False):
     if m:
         while True:
             try:
-                try:
-                    arquivo = os.listdir(pastaFonte)
-                except:
-                    pass
+                arquivo = os.listdir(pastaFonte)
                 dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
                 for arq in arquivo:
                     arquivosImagemDia = os.listdir(pastaImagemDia)
@@ -65,6 +62,8 @@ def loop(m = False):
                 deleta_arquivos(pastaVideoDia, 1)
                 deleta_arquivos(pastaImagemMes, 30)
                 deleta_arquivos(pastaVideoMes, 30)
+            except:
+                pass
             finally:
                 time.sleep(5)
 
