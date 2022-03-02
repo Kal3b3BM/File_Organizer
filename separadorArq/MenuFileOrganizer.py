@@ -38,31 +38,31 @@ def deleta_arquivos(pasta, dias):
                 continue
 
 def loop(m = False):
-    try:
-        pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
         if m:
-            while True:
-                arquivo = os.listdir(pastaFonte)
-                dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-                for arq in arquivo:
-                    arquivosImagemDia = os.listdir(pastaImagemDia)
-                    arquivosVideoDia = os.listdir(pastaVideoDia)
-                    if arq not in (arquivosImagemDia, arquivosVideoDia):
-                        arq = pastaFonte + f"/{arq}"
-                        dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
-                        print(arq, dCria, dPass)
-                        if dCria >= dPass and arq[-3:].lower() in ("jpg", "png", "jpeg"):
-                            shutil.copy(arq, pastaImagemDia)
-                            shutil.copy(arq, pastaImagemMes)
-                        if dCria >= dPass and arq[-3:].lower() in ("mp4", "wmv", "mpeg", "mov"):
-                            shutil.copy(arq, pastaVideoDia)
-                            shutil.copy(arq, pastaVideoMes)
-                deleta_arquivos(pastaImagemDia, 1)
-                deleta_arquivos(pastaVideoDia, 1)
-                deleta_arquivos(pastaImagemMes, 30)
-                deleta_arquivos(pastaVideoMes, 30)
-    finally:
-        time.sleep(5)
+            try:
+                pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
+                while True:
+                    arquivo = os.listdir(pastaFonte)
+                    dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+                    for arq in arquivo:
+                        arquivosImagemDia = os.listdir(pastaImagemDia)
+                        arquivosVideoDia = os.listdir(pastaVideoDia)
+                        if arq not in (arquivosImagemDia, arquivosVideoDia):
+                            arq = pastaFonte + f"/{arq}"
+                            dCria = time.strftime('%Y-%m-%d', time.strptime(time.ctime(os.path.getctime(arq))))
+                            print(arq, dCria, dPass)
+                            if dCria >= dPass and arq[-3:].lower() in ("jpg", "png", "jpeg"):
+                                shutil.copy(arq, pastaImagemDia)
+                                shutil.copy(arq, pastaImagemMes)
+                            if dCria >= dPass and arq[-3:].lower() in ("mp4", "wmv", "mpeg", "mov"):
+                                shutil.copy(arq, pastaVideoDia)
+                                shutil.copy(arq, pastaVideoMes)
+                    deleta_arquivos(pastaImagemDia, 1)
+                    deleta_arquivos(pastaVideoDia, 1)
+                    deleta_arquivos(pastaImagemMes, 30)
+                    deleta_arquivos(pastaVideoMes, 30)
+            finally:
+                time.sleep(5)
 
 
 
