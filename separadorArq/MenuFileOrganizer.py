@@ -17,14 +17,13 @@ def sel_pastas():
         return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
 
 def ler_jason():
-    file = open(r'C:\Windows\config.json', 'r')
-    pastaFonte = str(file.readline()[:-1])
-    pastaImagemDia = str(file.readline()[:-1])
-    pastaVideoDia = str(file.readline()[:-1])
-    pastaImagemMes = str(file.readline()[:-1])
-    pastaVideoMes = str(file.readline()[:])
-    file.close()
-    return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
+    with open(r'C:\Windows\config.json', 'r') as file:
+        pastaFonte = str(file.readline()[:-1])
+        pastaImagemDia = str(file.readline()[:-1])
+        pastaVideoDia = str(file.readline()[:-1])
+        pastaImagemMes = str(file.readline()[:-1])
+        pastaVideoMes = str(file.readline()[:])
+        return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
 
 def deleta_arquivos(pasta, dias):
     arquivo = os.listdir(pasta)
@@ -39,10 +38,10 @@ def deleta_arquivos(pasta, dias):
                 continue
 
 def loop(m = False):
-    pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
-    if m:
-        while True:
-            try:
+    try:
+        pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
+        if m:
+            while True:
                 arquivo = os.listdir(pastaFonte)
                 dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
                 for arq in arquivo:
@@ -62,10 +61,9 @@ def loop(m = False):
                 deleta_arquivos(pastaVideoDia, 1)
                 deleta_arquivos(pastaImagemMes, 30)
                 deleta_arquivos(pastaVideoMes, 30)
-            except:
-                pass
-            finally:
-                time.sleep(5)
+    finally:
+        time.sleep(5)
+
 
 
 if __name__ == "__main__":
