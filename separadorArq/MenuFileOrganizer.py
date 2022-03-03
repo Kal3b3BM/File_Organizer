@@ -13,7 +13,6 @@ def sel_pastas():
             pastaImagemMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO MÊS")
             pastaVideoMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO MÊS")
             file.write(f'{pastaFonte}\n{pastaImagemDia}\n{pastaVideoDia}\n{pastaImagemMes}\n{pastaVideoMes}')
-            return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
 
 def ler_jason():
     with open(r'C:\Windows\config.json', 'r') as file:
