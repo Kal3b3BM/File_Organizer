@@ -6,15 +6,14 @@ root.withdraw()
 
 def sel_pastas():
     if "y" == input("Selecionar pastas? [y/n] ").lower():
-        file = open(r'C:\Windows\config.json', 'w')
-        pastaFonte = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta Fonte")
-        pastaImagemDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO DIA")
-        pastaVideoDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO DIA")
-        pastaImagemMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO MÊS")
-        pastaVideoMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO MÊS")
-        file.write(f'{pastaFonte}\n{pastaImagemDia}\n{pastaVideoDia}\n{pastaImagemMes}\n{pastaVideoMes}')
-        file.close()
-        return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
+        with open(r'C:\Windows\config.json', 'w') as file:
+            pastaFonte = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta Fonte")
+            pastaImagemDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO DIA")
+            pastaVideoDia = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO DIA")
+            pastaImagemMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de IMAGEM DO MÊS")
+            pastaVideoMes = filedialog.askdirectory(parent=root, initialdir="/", title="Selecionar pasta de VÍDEO DO MÊS")
+            file.write(f'{pastaFonte}\n{pastaImagemDia}\n{pastaVideoDia}\n{pastaImagemMes}\n{pastaVideoMes}')
+            return (pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes)
 
 def ler_jason():
     with open(r'C:\Windows\config.json', 'r') as file:
@@ -39,9 +38,9 @@ def deleta_arquivos(pasta, dias):
 
 def loop(m = False):
         if m:
-            try:
-                pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
-                while True:
+            while True:
+                try:
+                    pastaFonte, pastaImagemDia, pastaVideoDia, pastaImagemMes, pastaVideoMes = ler_jason()
                     arquivo = os.listdir(pastaFonte)
                     dPass = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
                     for arq in arquivo:
@@ -61,7 +60,8 @@ def loop(m = False):
                     deleta_arquivos(pastaVideoDia, 1)
                     deleta_arquivos(pastaImagemMes, 30)
                     deleta_arquivos(pastaVideoMes, 30)
-            finally:
+                except:
+                    pass
                 time.sleep(5)
 
 
